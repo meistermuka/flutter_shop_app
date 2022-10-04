@@ -9,8 +9,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'MyShop',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+          colorScheme: ThemeData().colorScheme.copyWith(
+                primary: Colors.purple,
+                secondary: Colors.deepOrange,
+              ),
+          fontFamily: 'Lato'),
       home: ProductsOverviewScreen(),
     );
   }
