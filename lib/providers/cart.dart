@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:uuid/uuid.dart';
 
 class CartItem {
   final String id;
@@ -47,11 +48,17 @@ class Cart with ChangeNotifier {
       _items.putIfAbsent(
           productId,
           () => CartItem(
-              id: DateTime.now().toString(),
-              title: title,
-              quantity: 1,
-              price: price));
+                id: Uuid().v4(),
+                title: title,
+                quantity: 1,
+                price: price,
+              ));
     }
+    notifyListeners();
+  }
+
+  void removeItem(String id) {
+    _items.remove(id);
     notifyListeners();
   }
 }
