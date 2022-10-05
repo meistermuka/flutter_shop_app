@@ -6,6 +6,7 @@ import './screens/product_details_screen.dart';
 import './screens/products_overview_screen.dart';
 import './providers/products_provider.dart';
 import './providers/cart.dart';
+import './providers/orders.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,7 +16,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => Products()),
-        ChangeNotifierProvider(create: (_) => Cart())
+        ChangeNotifierProvider(create: (_) => Cart()),
+        ChangeNotifierProvider(create: (_) => Orders()),
       ],
       child: MaterialApp(
         title: 'MyShop',
