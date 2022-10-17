@@ -27,6 +27,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   _saveForm() {
+    final _isValid = _form.currentState.validate();
+
+    if (!_isValid) {
+      return;
+    }
     _form.currentState.save();
   }
 
@@ -54,6 +59,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     labelText: 'Title',
                   ),
                   textInputAction: TextInputAction.next,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Provide a value';
+                    }
+                    return null;
+                  },
                   onSaved: (value) {
                     _editedProduct = Product(
                       id: null,
@@ -69,6 +80,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     labelText: 'Price',
                   ),
                   textInputAction: TextInputAction.next,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Provide a value';
+                    }
+                    if (double.tryParse(value) == null) {
+                      return 'Please enter a valid number';
+                    }
+                    if (double.parse(value) <= 0) {
+                      return 'Value must be greater than 0';
+                    }
+                    return null;
+                  },
                   keyboardType: TextInputType.number,
                   onSaved: (value) {
                     _editedProduct = Product(
@@ -84,6 +107,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   decoration: InputDecoration(
                     labelText: 'Description',
                   ),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Provide a value';
+                    }
+                    return null;
+                  },
                   maxLines: 3,
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.multiline,
@@ -131,6 +160,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                           setState(() {});
                         },
                         onFieldSubmitted: (_) => _saveForm(),
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return 'Provide a value';
+                          }
+                          return null;
+                        },
                         onSaved: (value) {
                           _editedProduct = Product(
                             id: null,
