@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../providers/product.dart';
+
 class EditProductScreen extends StatefulWidget {
   static const routeName = '/edit-product';
 
@@ -9,6 +11,14 @@ class EditProductScreen extends StatefulWidget {
 
 class _EditProductScreenState extends State<EditProductScreen> {
   final _imageUrlController = TextEditingController();
+  final _form = GlobalKey<FormState>();
+  var _editedProduct = Product(
+    id: null,
+    title: '',
+    description: '',
+    price: 0.0,
+    imageUrl: '',
+  );
 
   @override
   void dispose() {
@@ -16,15 +26,26 @@ class _EditProductScreenState extends State<EditProductScreen> {
     super.dispose();
   }
 
+  _saveForm() {
+    _form.currentState.save();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Edit product'),
+        actions: [
+          IconButton(
+            onPressed: _saveForm,
+            icon: Icon(Icons.save),
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
+          key: _form,
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -33,6 +54,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     labelText: 'Title',
                   ),
                   textInputAction: TextInputAction.next,
+                  onSaved: (value) {
+                    _editedProduct = Product(
+                      id: null,
+                      title: value,
+                      description: _editedProduct.description,
+                      price: _editedProduct.price,
+                      imageUrl: _editedProduct.imageUrl,
+                    );
+                  },
                 ),
                 TextFormField(
                   decoration: InputDecoration(
@@ -40,6 +70,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   ),
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
+                  onSaved: (value) {
+                    _editedProduct = Product(
+                      id: null,
+                      title: _editedProduct.title,
+                      description: _editedProduct.description,
+                      price: double.parse(value),
+                      imageUrl: _editedProduct.imageUrl,
+                    );
+                  },
                 ),
                 TextFormField(
                   decoration: InputDecoration(
@@ -48,6 +87,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
                   maxLines: 3,
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.multiline,
+                  onSaved: (value) {
+                    _editedProduct = Product(
+                      id: null,
+                      title: _editedProduct.title,
+                      description: value,
+                      price: _editedProduct.price,
+                      imageUrl: _editedProduct.imageUrl,
+                    );
+                  },
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -81,6 +129,16 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         controller: _imageUrlController,
                         onEditingComplete: () {
                           setState(() {});
+                        },
+                        onFieldSubmitted: (_) => _saveForm(),
+                        onSaved: (value) {
+                          _editedProduct = Product(
+                            id: null,
+                            title: value,
+                            description: _editedProduct.description,
+                            price: _editedProduct.price,
+                            imageUrl: value,
+                          );
                         },
                       ),
                     ),
