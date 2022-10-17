@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 import './product.dart';
 
@@ -50,7 +51,15 @@ class Products with ChangeNotifier {
     return _items.firstWhere((product) => product.id == id);
   }
 
-  void addProduct() {
+  void addProduct(Product product) {
+    final newProduct = Product(
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      imageUrl: product.imageUrl,
+      id: Uuid().v4(),
+    );
+    _items.add(newProduct);
     notifyListeners();
   }
 }
