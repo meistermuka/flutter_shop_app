@@ -26,22 +26,24 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => Orders()),
         ChangeNotifierProvider(create: (_) => Auth()),
       ],
-      child: MaterialApp(
-        title: 'MyShop',
-        theme: ThemeData(
-            colorScheme: ThemeData().colorScheme.copyWith(
-                  primary: Colors.purple,
-                  secondary: Colors.deepOrange,
-                ),
-            fontFamily: 'Lato'),
-        home: AuthScreen(),
-        routes: {
-          ProductDetailsScreen.routeName: (ctx) => ProductDetailsScreen(),
-          CartScreen.routeName: (ctx) => CartScreen(),
-          OrdersScreen.routeName: (ctx) => OrdersScreen(),
-          UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
-          EditProductScreen.routeName: (ctx) => EditProductScreen(),
-        },
+      child: Consumer<Auth>(
+        builder: (ctx, auth, _) => MaterialApp(
+          title: 'MyShop',
+          theme: ThemeData(
+              colorScheme: ThemeData().colorScheme.copyWith(
+                    primary: Colors.purple,
+                    secondary: Colors.deepOrange,
+                  ),
+              fontFamily: 'Lato'),
+          home: auth.isAuth ? ProductsOverviewScreen() : AuthScreen(),
+          routes: {
+            ProductDetailsScreen.routeName: (ctx) => ProductDetailsScreen(),
+            CartScreen.routeName: (ctx) => CartScreen(),
+            OrdersScreen.routeName: (ctx) => OrdersScreen(),
+            UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
+            EditProductScreen.routeName: (ctx) => EditProductScreen(),
+          },
+        ),
       ),
     );
   }
