@@ -7,6 +7,10 @@ import './product.dart';
 import '../models/http_exception.dart';
 
 class Products with ChangeNotifier {
+  String authToken;
+
+  Products(this.authToken, this._items);
+
   List<Product> _items = [
     /*Product(
       id: 'p1',
@@ -55,8 +59,8 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    final url = Uri.https(
-        'flutter-shop-app-e6a4d-default-rtdb.firebaseio.com', '/products.json');
+    final url = Uri.parse(
+        'https://flutter-shop-app-e6a4d-default-rtdb.firebaseio.com/products.json?auth=$authToken');
 
     try {
       final response = await http.get(url);
