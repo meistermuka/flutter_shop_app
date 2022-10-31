@@ -7,9 +7,10 @@ import './product.dart';
 import '../models/http_exception.dart';
 
 class Products with ChangeNotifier {
-  String authToken;
+  final String authToken;
+  final String userId;
 
-  Products(this.authToken, this._items);
+  Products(this.authToken, this.userId, this._items);
 
   List<Product> _items = [
     /*Product(
@@ -65,10 +66,14 @@ class Products with ChangeNotifier {
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
-      final List<Product> loadedProducts = [];
       if (extractedData == null) {
         return;
       }
+      final favouritesUrl = Uri.parse(
+          'https://flutter-shop-app-e6a4d-default-rtdb.firebaseio.com/userFavourites/$userId.json?auth=$authToken');
+      final favouriteResponse = await http.get(favouritesUrl);
+      final favouriteData = json.decode(favouriteResponse.body);
+      final List<Product> loadedProducts = [];
       extractedData.forEach((id, data) {
         loadedProducts.add(Product(
           id: id,
@@ -76,7 +81,8 @@ class Products with ChangeNotifier {
           description: data['description'],
           price: data['price'],
           imageUrl: data['imageUrl'],
-          isFavourite: data['isFavourite'],
+          isFavourite:
+              favouriteData == null ? false : favouriteData[id] ?? false,
         ));
       });
       _items = loadedProducts;
@@ -97,7 +103,6 @@ class Products with ChangeNotifier {
           'description': product.description,
           'price': product.price,
           'imageUrl': product.imageUrl,
-          'isFavourite': product.isFavourite,
         }),
       );
 

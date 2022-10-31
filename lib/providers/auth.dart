@@ -11,6 +11,10 @@ class Auth with ChangeNotifier {
 
   final API_KEY = 'AIzaSyD_ht_N6aoQW9o8__Oyub8CODg2trdk0h8';
 
+  String get userId {
+    return _userId;
+  }
+
   bool get isAuth {
     return token != null;
   }
